@@ -169,12 +169,18 @@ func getProjectConfig(cmd *cobra.Command, args []string) (*generator.Config, err
 	} else {
 		if err := survey.AskOne(&survey.Select{
 			Message: "Choose deployment tool:",
-			Options: []string{"sam", "cdk", "serverless", "terraform"},
-			Default: "sam",
-			Help:    "SAM: AWS native, CDK: Infrastructure as code, Serverless: Framework, Terraform: Multi-cloud",
+			Options: []string{
+				"sam (AWS Serverless Application Model - AWS native, simple configuration)",
+				"cdk (AWS Cloud Development Kit - TypeScript/Python, programmable infrastructure)",
+				"serverless (Serverless Framework - Multi-cloud, large plugin ecosystem)",
+				"terraform (HashiCorp Terraform - Multi-provider, declarative infrastructure)",
+			},
+			Default: "sam (AWS Serverless Application Model - AWS native, simple configuration)",
 		}, &config.DeploymentTool); err != nil {
 			return nil, err
 		}
+		// Extract the short form
+		config.DeploymentTool = strings.Split(config.DeploymentTool, " ")[0]
 	}
 
 	// Get features
@@ -187,17 +193,17 @@ func getProjectConfig(cmd *cobra.Command, args []string) (*generator.Config, err
 		if err := survey.AskOne(&survey.MultiSelect{
 			Message: "Select features to include:",
 			Options: []string{
-				"api (API Gateway integration)",
-				"dynamodb (DynamoDB support)",
-				"sqs (SQS queue processing)",
-				"sns (SNS event handling)",
-				"s3 (S3 bucket operations)",
-				"cognito (Authentication)",
-				"secrets (Secrets Manager)",
-				"eventbridge (EventBridge rules)",
-				"stepfunctions (Step Functions)",
+				"api (API Gateway - REST APIs with routing and validation)",
+				"dynamodb (DynamoDB - NoSQL database for user/room data)",
+				"sqs (SQS - Message queue for async processing)",
+				"sns (SNS - Pub/sub messaging for notifications)",
+				"s3 (S3 - Object storage for files/media)",
+				"cognito (Cognito - User authentication and authorization)",
+				"secrets (Secrets Manager - Store API keys and credentials)",
+				"eventbridge (EventBridge - Event-driven triggers)",
+				"stepfunctions (Step Functions - Workflow orchestration)",
 			},
-			Default: []string{"api"},
+			Default: []string{"api (API Gateway - REST APIs with routing and validation)"},
 		}, &selectedFeatures); err != nil {
 			return nil, err
 		}
