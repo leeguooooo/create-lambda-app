@@ -39,12 +39,23 @@
 go install github.com/leeguooooo/create-lambda-app@latest
 ```
 
+After installation, the binary will be in `$GOPATH/bin` (usually `~/go/bin`). You can run it with:
+
+```bash
+# If ~/go/bin is in your PATH
+create-lambda-app
+
+# Or use the full path
+~/go/bin/create-lambda-app
+```
+
 Or clone and build:
 
 ```bash
 git clone https://github.com/leeguooooo/create-lambda-app.git
 cd create-lambda-app
 go build -o create-lambda-app
+./create-lambda-app  # Run directly
 ```
 
 ## Quick Start

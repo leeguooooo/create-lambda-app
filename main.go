@@ -220,10 +220,12 @@ func getProjectConfig(cmd *cobra.Command, args []string) (*generator.Config, err
 			"simple (Simple handler-based structure)",
 			"ddd (Domain-Driven Design)",
 		},
-		Default: "clean",
+		Default: "clean (Clean Architecture with use cases)",
 	}, &config.Architecture); err != nil {
 		return nil, err
 	}
+	// Extract the short form
+	config.Architecture = strings.Split(config.Architecture, " ")[0]
 
 	// Testing framework
 	if err := survey.AskOne(&survey.Select{
@@ -233,10 +235,12 @@ func getProjectConfig(cmd *cobra.Command, args []string) (*generator.Config, err
 			"standard (Standard library only)",
 			"ginkgo (BDD-style testing)",
 		},
-		Default: "testify",
+		Default: "testify (Assertions and mocks)",
 	}, &config.TestingFramework); err != nil {
 		return nil, err
 	}
+	// Extract the short form
+	config.TestingFramework = strings.Split(config.TestingFramework, " ")[0]
 
 	return config, nil
 }
