@@ -297,7 +297,13 @@ func generateSAMConfig(projectPath string, config *Config) error {
 func generateCDKConfig(projectPath string, config *Config) error {
 	// Create CDK app structure
 	cdkDir := filepath.Join(projectPath, "cdk")
-	if err := os.MkdirAll(cdkDir, 0755); err != nil {
+	if err := os.MkdirAll(filepath.Join(cdkDir, "lib"), 0755); err != nil {
+		return err
+	}
+	if err := os.MkdirAll(filepath.Join(cdkDir, "bin"), 0755); err != nil {
+		return err
+	}
+	if err := os.MkdirAll(filepath.Join(cdkDir, "test"), 0755); err != nil {
 		return err
 	}
 
@@ -341,6 +347,9 @@ func generateTerraformConfig(projectPath string, config *Config) error {
 	// Create Terraform structure
 	tfDir := filepath.Join(projectPath, "terraform")
 	if err := os.MkdirAll(filepath.Join(tfDir, "modules/lambda"), 0755); err != nil {
+		return err
+	}
+	if err := os.MkdirAll(filepath.Join(tfDir, "environments"), 0755); err != nil {
 		return err
 	}
 
@@ -538,21 +547,30 @@ func createMetadataFile(projectPath string, config *Config) error {
 func InitGit(projectPath string) error {
 	cmd := exec.Command("git", "init")
 	cmd.Dir = projectPath
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		return err
+		return fmt.Errorf("failed to initialize git repository: %w", err)
 	}
 
 	// Add all files
 	cmd = exec.Command("git", "add", ".")
 	cmd.Dir = projectPath
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		return err
+		return fmt.Errorf("failed to add files to git: %w", err)
 	}
 
 	// Initial commit
 	cmd = exec.Command("git", "commit", "-m", "Initial commit from create-lambda-app")
 	cmd.Dir = projectPath
-	return cmd.Run()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to create initial commit: %w", err)
+	}
+	return nil
 }
 
 // InstallDependencies runs go mod download in the project directory

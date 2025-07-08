@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/leeguooooo/create-lambda-app/internal/generator"
-	"github.com/leeguooooo/create-lambda-app/internal/prompts"
-	"github.com/leeguooooo/create-lambda-app/internal/templates"
 )
 
 var (
@@ -68,8 +67,10 @@ func run(cmd *cobra.Command, args []string) error {
 
 	// Validate project path
 	projectPath := filepath.Join(".", config.Name)
-	if _, err := os.Stat(projectPath); !os.IsNotExist(err) {
+	if _, err := os.Stat(projectPath); err == nil {
 		return fmt.Errorf("directory %s already exists", config.Name)
+	} else if !os.IsNotExist(err) {
+		return fmt.Errorf("error checking directory %s: %w", config.Name, err)
 	}
 
 	// Create project
@@ -141,8 +142,14 @@ func getProjectConfig(cmd *cobra.Command, args []string) (*generator.Config, err
 		}
 	}
 
-	// Normalize project name
+	// Normalize and validate project name
 	config.Name = strings.ToLower(strings.ReplaceAll(config.Name, " ", "-"))
+	
+	// Validate project name
+	validName := regexp.MustCompile(`^[a-z][a-z0-9-]*$`)
+	if !validName.MatchString(config.Name) {
+		return nil, fmt.Errorf("project name must start with a letter and contain only lowercase letters, numbers, and hyphens")
+	}
 
 	// Get description
 	if desc, _ := cmd.Flags().GetString("description"); desc != "" {
