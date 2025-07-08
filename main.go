@@ -9,9 +9,9 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"create-lambda-app/internal/generator"
-	"create-lambda-app/internal/prompts"
-	"create-lambda-app/internal/templates"
+	"github.com/leeguooooo/create-lambda-app/internal/generator"
+	"github.com/leeguooooo/create-lambda-app/internal/prompts"
+	"github.com/leeguooooo/create-lambda-app/internal/templates"
 )
 
 var (

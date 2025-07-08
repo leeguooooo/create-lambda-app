@@ -11,14 +11,27 @@ import (
 	"text/template"
 	"time"
 
-	"create-lambda-app/internal/templates"
+	"github.com/leeguooooo/create-lambda-app/internal/templates"
 )
+
+// getGitHubUsername attempts to get the GitHub username from git config
+func getGitHubUsername() string {
+	cmd := exec.Command("git", "config", "--get", "user.name")
+	output, err := cmd.Output()
+	if err == nil && len(output) > 0 {
+		username := strings.TrimSpace(string(output))
+		// Convert to lowercase and replace spaces with hyphens
+		username = strings.ToLower(strings.ReplaceAll(username, " ", "-"))
+		return username
+	}
+	return "myusername"
+}
 
 // Generate creates a new Lambda project based on the configuration
 func Generate(config *Config) error {
 	// Set default module name if not provided
 	if config.Module == "" {
-		config.Module = fmt.Sprintf("github.com/yourusername/%s", config.Name)
+		config.Module = fmt.Sprintf("github.com/%s/%s", getGitHubUsername(), config.Name)
 	}
 
 	// Create project directory

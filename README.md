@@ -36,13 +36,13 @@
 ## Installation
 
 ```bash
-go install github.com/yourusername/create-lambda-app@latest
+go install github.com/leeguooooo/create-lambda-app@latest
 ```
 
 Or clone and build:
 
 ```bash
-git clone https://github.com/yourusername/create-lambda-app.git
+git clone https://github.com/leeguooooo/create-lambda-app.git
 cd create-lambda-app
 go build -o create-lambda-app
 ```
@@ -389,6 +389,6 @@ Inspired by [create-worker-app](https://github.com/cloudflare/create-worker-app)
 
 ## Support
 
-- 📖 [Documentation](https://github.com/yourusername/create-lambda-app/wiki)
-- 🐛 [Issue Tracker](https://github.com/yourusername/create-lambda-app/issues)
-- 💬 [Discussions](https://github.com/yourusername/create-lambda-app/discussions)
+- 📖 [Documentation](https://github.com/leeguooooo/create-lambda-app/wiki)
+- 🐛 [Issue Tracker](https://github.com/leeguooooo/create-lambda-app/issues)
+- 💬 [Discussions](https://github.com/leeguooooo/create-lambda-app/discussions)
